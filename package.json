@@ -1,0 +1,33 @@
+{
+  "name": "@cinatra-ai/screenshot-artifact",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "devDependencies": {
+    "@cinatra-ai/sdk-extensions": "*"
+  },
+  "cinatra": {
+    "apiVersion": "cinatra.ai/v1",
+    "kind": "artifact",
+    "dependencies": [],
+    "artifact": {
+      "accepts": {
+        "file": {
+          "mimeTypes": [
+            "image/png",
+            "image/jpeg",
+            "image/webp"
+          ]
+        }
+      },
+      "skills": {
+        "matchers": [
+          "@cinatra-ai/screenshot-artifact:screenshot-matcher"
+        ]
+      },
+      "matcherConfidenceThreshold": 0.7
+    }
+  }
+}

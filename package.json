@@ -20,6 +20,7 @@
   "cinatra": {
     "apiVersion": "cinatra.ai/v1",
     "kind": "artifact",
+    "displayName": "Screenshot",
     "dependencies": [],
     "artifact": {
       "accepts": {

@@ -16,6 +16,22 @@ export const screenshotArtifactManifest: SemanticArtifactManifest = {
       mimeTypes: ["image/png", "image/jpeg", "image/webp"],
     },
   },
+  // Entry 95 (epic cinatra#1785): the type this pack owns is DECLARED
+  // explicitly, never derived. `screenshot` is dedicated-claimed and
+  // self-registered (no inline schema needed); the matcher below classifies
+  // accepted images INTO this type, it does not create it.
+  objectTypes: [
+    {
+      type: "@cinatra-ai/screenshot-artifact:screenshot",
+      claim: "dedicated",
+      dispositions: {
+        projection: "artifact-safe",
+        pinnable: true,
+        snapshotPolicy: "content",
+        sensitivity: "normal",
+      },
+    },
+  ],
   skills: {
     matchers: ["@cinatra-ai/screenshot-artifact:screenshot-matcher"],
   },

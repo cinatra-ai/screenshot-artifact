@@ -32,6 +32,18 @@
           ]
         }
       },
+      "objectTypes": [
+        {
+          "type": "@cinatra-ai/screenshot-artifact:screenshot",
+          "claim": "dedicated",
+          "dispositions": {
+            "projection": "artifact-safe",
+            "pinnable": true,
+            "snapshotPolicy": "content",
+            "sensitivity": "normal"
+          }
+        }
+      ],
       "skills": {
         "matchers": [
           "@cinatra-ai/screenshot-artifact:screenshot-matcher"

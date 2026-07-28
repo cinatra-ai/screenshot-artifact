@@ -33,7 +33,7 @@ export const screenshotArtifactManifest: SemanticArtifactManifest = {
     },
   ],
   skills: {
-    matchers: ["@cinatra-ai/screenshot-artifact:screenshot-matcher"],
+    matchers: ["@cinatra-ai/screenshot-matcher-skill:screenshot-matcher"],
   },
   matcherConfidenceThreshold: 0.7,
 };

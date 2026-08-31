@@ -10,16 +10,44 @@ import type { SemanticArtifactManifest } from "@cinatra-ai/sdk-extensions";
 // producer assertion is needed; image-generation producer paths leave the
 // screenshot extension unchanged, while producer-only blog-image handling stays
 // separate.
+//
+// THE TYPE THIS PACK OWNS IS DECLARED EXPLICITLY, never derived, and it now
+// SHIPS ITS OBJECT-DATA SCHEMA. It was the one artifact type of the fleet whose
+// claim declared none — the matcher classifies accepted images INTO the type, it
+// does not describe them — and a claim without a schema is a type whose records
+// nothing can read. The schema is what lets a screenshot's own facts reach a
+// display through the content channel's object projection.
+//
+// THE SCHEMA'S THREE FACTS are the ones the ratified drawing draws beneath the
+// picture: WHERE it was taken (`capturedUrl`), AT WHAT VIEWPORT (`viewport`),
+// and WHEN (`capturedAt`). They are optional, because a screenshot handed over
+// as an upload carries none of them and must still be a valid record; a display
+// leaves an absent fact out rather than inventing it.
+//
+// THE DISPLAY. `ui.renderers.detail` registers this pack's own display for its
+// own type at PROPS VERSION 2 — the version that carries the island-scoped byte
+// reference. A screenshot row used to be drawn by the foreign image display,
+// which paints a picture and knows nothing about what was on screen; and a
+// display below version 2 paints nothing at all inside a third-party
+// application, because the session byte addresses it would reach for are
+// cookie-gated. The display draws every form the type accepts.
 export const screenshotArtifactManifest: SemanticArtifactManifest = {
   accepts: {
     file: {
       mimeTypes: ["image/png", "image/jpeg", "image/webp"],
     },
   },
-  // Entry 95 (epic cinatra#1785): the type this pack owns is DECLARED
-  // explicitly, never derived. `screenshot` is dedicated-claimed and
-  // self-registered (no inline schema needed); the matcher below classifies
-  // accepted images INTO this type, it does not create it.
+  ui: {
+    abiVersion: 1,
+    sdkAbiRange: "^2.5.0",
+    renderers: {
+      detail: {
+        entry: "./src/renderers/detail.tsx",
+        propsApiVersion: 2,
+        representations: ["image/png", "image/jpeg", "image/webp"],
+      },
+    },
+  },
   objectTypes: [
     {
       type: "@cinatra-ai/screenshot-artifact:screenshot",
@@ -29,6 +57,29 @@ export const screenshotArtifactManifest: SemanticArtifactManifest = {
         pinnable: true,
         snapshotPolicy: "content",
         sensitivity: "normal",
+      },
+      schema: {
+        type: "object",
+        properties: {
+          title: { type: "string" },
+          mime: { type: "string" },
+          size: { type: "integer" },
+          capturedUrl: { type: "string", format: "uri" },
+          viewport: {
+            type: "object",
+            properties: {
+              width: { type: "integer", minimum: 1 },
+              height: { type: "integer", minimum: 1 },
+            },
+            required: ["width", "height"],
+            additionalProperties: false,
+          },
+          capturedAt: { type: "string", format: "date-time" },
+          latestRepresentationRevisionId: { type: "string" },
+          latestDigest: { type: "string" },
+        },
+        required: ["mime", "size"],
+        additionalProperties: true,
       },
     },
   ],

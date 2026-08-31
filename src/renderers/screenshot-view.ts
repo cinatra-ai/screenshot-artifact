@@ -112,8 +112,14 @@ export function formatWhere(url: unknown): string | null {
   if (typeof url !== "string") return null;
   const trimmed = url.trim();
   if (trimmed === "") return null;
-  const withoutScheme = trimmed.replace(/^[a-z][a-z0-9+.-]*:\/\//i, "");
-  const withoutTrailingSlash = withoutScheme.replace(/\/+$/, "");
+  const schemeIdx = trimmed.indexOf("://");
+  const withoutScheme =
+    schemeIdx > 0 && /^[a-z][a-z0-9+.-]*$/i.test(trimmed.slice(0, schemeIdx))
+      ? trimmed.slice(schemeIdx + 3)
+      : trimmed;
+  let end = withoutScheme.length;
+  while (end > 0 && withoutScheme.charAt(end - 1) === "/") end -= 1;
+  const withoutTrailingSlash = withoutScheme.slice(0, end);
   return withoutTrailingSlash === "" ? null : withoutTrailingSlash;
 }
 

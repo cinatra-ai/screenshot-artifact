@@ -83,8 +83,17 @@ export const screenshotArtifactManifest: SemanticArtifactManifest = {
       },
     },
   ],
+  // THE MATCHER SKILL IS OWNED BY THIS PACKAGE. The host honours a candidate
+  // matcher skill on one of two arms: the skill is the resolved target of a
+  // declared post-extraction provider edge, or the skill is package-owned by
+  // the artifact extension itself. This pack takes the second arm, so the id is
+  // self-namespaced to this package and the bundle ships beside this manifest
+  // at `skills/screenshot-matcher/SKILL.md` — the co-located path the owning
+  // package name is derived from. A sibling skill package satisfies NEITHER
+  // arm: an id in a foreign namespace is not package-owned, and a dependency
+  // edge is not a provider edge the host resolves for trust.
   skills: {
-    matchers: ["@cinatra-ai/screenshot-matcher-skill:screenshot-matcher"],
+    matchers: ["@cinatra-ai/screenshot-artifact:screenshot-matcher"],
   },
   matcherConfidenceThreshold: 0.7,
 };

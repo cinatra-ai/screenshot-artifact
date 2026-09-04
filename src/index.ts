@@ -83,17 +83,30 @@ export const screenshotArtifactManifest: SemanticArtifactManifest = {
       },
     },
   ],
-  // THE MATCHER SKILL IS OWNED BY THIS PACKAGE. The host honours a candidate
-  // matcher skill on one of two arms: the skill is the resolved target of a
-  // declared post-extraction provider edge, or the skill is package-owned by
-  // the artifact extension itself. This pack takes the second arm, so the id is
-  // self-namespaced to this package and the bundle ships beside this manifest
-  // at `skills/screenshot-matcher/SKILL.md` — the co-located path the owning
-  // package name is derived from. A sibling skill package satisfies NEITHER
-  // arm: an id in a foreign namespace is not package-owned, and a dependency
-  // edge is not a provider edge the host resolves for trust.
+  // THE MATCHER SKILL IS OWNED BY THE SIBLING PROVIDER PACKAGE. The host
+  // honours a candidate matcher skill on one of two arms: the skill is the
+  // resolved target of a declared post-extraction provider edge, or the skill
+  // is package-owned by the artifact extension itself. This pack takes the
+  // FIRST arm.
+  //
+  // WHY NOT THE PACKAGE-OWNED ARM. Taking it means shipping a `SKILL.md` inside
+  // a `kind:"artifact"` package, and the platform's skill-packaging verdict
+  // refuses exactly that (`skill-md-in-non-skill-package`) — with an empty
+  // fixture allowlist for extension repos and no declaration that can make it
+  // conform. Its own message names the only conforming road: extract the bundle
+  // into a `-skill` extension and declare a dependency edge. A waiver on the
+  // host's legacy ledger is not that road: the ledger is a shrink-only ratchet
+  // for pre-existing debt, and this bundle has a conforming home already.
+  //
+  // WHERE IT LIVES NOW. `@cinatra-ai/screenshot-matcher-skill` — the
+  // `kind:"skill"`, `skillRole:"matcher"` sibling that already ships this
+  // bundle byte-for-byte at `skills/screenshot-matcher/SKILL.md`. The id below
+  // is therefore in the PROVIDER's namespace, which is what the host derives
+  // from the provider's own package name, and the `role:"matcher"` runtime edge
+  // in this package's `cinatra.dependencies` is what the host's declared-edge
+  // resolver reads to confer trust on it.
   skills: {
-    matchers: ["@cinatra-ai/screenshot-artifact:screenshot-matcher"],
+    matchers: ["@cinatra-ai/screenshot-matcher-skill:screenshot-matcher"],
   },
   matcherConfidenceThreshold: 0.7,
 };

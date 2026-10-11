@@ -11,6 +11,9 @@
   "scripts": {
     "test": "vitest run"
   },
+  "dependencies": {
+    "lucide-react": "^1.20.0"
+  },
   "peerDependencies": {
     "@cinatra-ai/sdk-extensions": "*",
     "react": "^19.0.0",
@@ -71,6 +74,10 @@
               "image/jpeg",
               "image/webp"
             ]
+          },
+          "listRow": {
+            "entry": "./src/renderers/list-row.tsx",
+            "propsApiVersion": 1
           }
         }
       },
@@ -155,6 +162,7 @@
       "import": "./src/renderers/detail.tsx",
       "default": "./src/renderers/detail.tsx"
     },
+    "./src/renderers/list-row": "./src/renderers/list-row.tsx",
     "./src/renderer-props": {
       "types": "./src/renderer-props.ts",
       "import": "./src/renderer-props.ts",

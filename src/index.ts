@@ -46,6 +46,10 @@ export const screenshotArtifactManifest: SemanticArtifactManifest = {
         propsApiVersion: 2,
         representations: ["image/png", "image/jpeg", "image/webp"],
       },
+      listRow: {
+        entry: "./src/renderers/list-row.tsx",
+        propsApiVersion: 1,
+      },
     },
   },
   objectTypes: [
